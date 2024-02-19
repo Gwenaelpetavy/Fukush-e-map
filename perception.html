@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Appel du style CSS associé à Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
+ 
   <title>Bootstrap Header Example</title>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -15,6 +15,7 @@
 
   <!-- Appel des fonctionnalités Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 </head>
 <body>
   <!-- Header -->
@@ -37,14 +38,25 @@
       </div>
     </header>
   </div>
+
+
 <!-- Container  -->
   <main class="container">
     <div id="map"></div>
 
+    <div id="select-container">
+      <label for="select-population">Population :</label>
+      <select id="select-population">
+          <option value="1999">1999</option>
+          <option value="26994">26994</option>
+          <option value="13195">13195</option>
+      </select>
+  </div>
+
   </main>
 </body>
 
-  <script type="text/javascript" src="data/aaaa.js"></script>
+  <script type="text/javascript" src="data/rhone.js"></script>
   <!-- Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
