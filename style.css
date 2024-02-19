@@ -9,3 +9,10 @@
     flex: 0 0 auto;
     width: 50%;
 }
+
+/* dimensions de la carte, et positionnement au centre */
+#map {
+    height: calc(75vh);
+    width: calc(75vw);
+    margin: 0 auto;
+  }
