@@ -1,5 +1,5 @@
 // sélection de l'emprise de la vue selon la latitude, la longitude et l'échelle
-var map = L.map('map').setView([45.750000, 4.850000], 9);
+var map = L.map('map').setView([34.886306, 134.379711], 5);
 
 // ajout du fond de carte : "ESRI imagerie satellite"
 var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
@@ -7,7 +7,7 @@ var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest
 }).addTo(map);
 
 
-var rhoneLayer = L.geoJSON(rhone, {
+var japonLayer = L.geoJSON(japon, {
     style: {
         color: 'white',
         weight: 1.5,
@@ -16,10 +16,10 @@ var rhoneLayer = L.geoJSON(rhone, {
     // affichage d'un pop-up (à partir d'OnEachFeature) annonçant le nom de la commune et son code Insee
     // lorsqu'une entité est cliquée par l'utilisateur
     onEachFeature: function (feature, layer) {
-        if (feature.properties && feature.properties.NOM_M) {
-            var popupContent = "<h4 style='text-align: center; margin: 0;'>" + feature.properties.NOM_M + "</h4>";
-            if (feature.properties.INSEE_COM) {
-                popupContent += "<p style='margin: 0;'>Code INSEE : " + feature.properties.INSEE_COM + "</p>";
+        if (feature.properties && feature.properties.ID_DILEM) {
+            var popupContent = "<h4 style='text-align: center; margin: 0;'>" + feature.properties.ID_DILEM + "</h4>";
+            if (feature.properties.Zone) {
+                popupContent += "<p style='margin: 0;'>Zone : " + feature.properties.Zone + "</p>";
             }
             layer.bindPopup(popupContent);
         }
@@ -29,7 +29,7 @@ var rhoneLayer = L.geoJSON(rhone, {
 
 
 
-var select = document.getElementById('select-population');
+var select = document.getElementById('select-zone');
 
 select.addEventListener('change', function() {
     var selectedValue = this.value;
@@ -38,9 +38,9 @@ select.addEventListener('change', function() {
         map.removeLayer(geojsonLayer);
     }
     // Créez une nouvelle couche avec les entités correspondant à la valeur sélectionnée
-    geojsonLayer = L.geoJSON(rhone, {
+    geojsonLayer = L.geoJSON(japon, {
         filter: function(feature) {
-            return feature.properties.POPULATION === selectedValue;
+            return feature.properties.Zone === selectedValue;
         },
         // Définissez l'option style ou d'autres si nécessaire
     }).addTo(map);
@@ -58,7 +58,7 @@ L.control.scale().addTo(map);
 
 // fonction et bouton permettant de revenir à la vue d'origine
 function resetView() {
-    map.setView([45.819960, 4.723230], 9);
+    map.setView([34.886306, 134.379711], 5);
 }
 var resetViewButton = L.Control.extend({
     options: {
@@ -81,7 +81,7 @@ var fond_carte = {
     "Fond de carte ESRI World Imagery": Esri_WorldImagery
 };
 var couches = {
-    "Communes du département du Rhône": rhoneLayer
+    "Zones japon": japonLayer
 };
 L.control.layers(fond_carte, couches).addTo(map);
 
@@ -102,7 +102,7 @@ legend.addTo(map);
 function updateLegend() {
     var communeLegend = document.getElementById('commune_legende');
 
-    communeLegend.style.display = map.hasLayer(rhoneLayer) ? 'block' : 'none';
+    communeLegend.style.display = map.hasLayer(japonLayer) ? 'block' : 'none';
 }
 map.on('overlayadd overlayremove', function () {
     updateLegend();
