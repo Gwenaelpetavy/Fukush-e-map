@@ -122,7 +122,7 @@ function zoomToJapan() {
 }
 
 function zoomToFukushima() {
-  map.setView([37.7749, 140.4674], 10); // Centrer sur Fukushima
+  map.setView([37.41209716212062, 140.11240156125362], 9); // Centrer sur Fukushima
 }
 
 var individusLayer = L.geoJSON().addTo(map);
@@ -231,6 +231,7 @@ addindividusLayer("data/individus.geojson");
 
 
 var fukushimaLayer = L.geoJSON().addTo(map);
+var dataFukushima; // Déclaration de la variable dataFukushima
 
 function addFukushimaLayer(url) {
   fetch(url)
@@ -272,16 +273,18 @@ function addFukushimaLayer(url) {
     });
 }
 
-function updateFukushima(id_dilem, year) {
+// Fonction pour mettre à jour les entités de Fukushima en fonction de l'ID sélectionné et de l'année
+function updateFukushima(id_dilem, selectedYear) {
+  selectedYear = selectedYear || 2013;
   if (!fukushimaLayer) {
     return; // Sortie si la couche Fukushima n'a pas été ajoutée
   }
 
   fukushimaLayer.clearLayers();
   var filteredFeatures = dataFukushima.features.filter(function (feature) {
-    return feature.properties.ID_DILEM === id_dilem && feature.properties.Annee === 2013; // Filtrer par année 2013
+    return feature.properties.ID_DILEM === id_dilem && feature.properties.Annee === selectedYear; // Filtrer par l'année spécifiée
   });
-  console.log('Nombre de dessins filtrés par l\'ID', id_dilem, 'et année 2013 :', filteredFeatures.length);
+  console.log('Nombre de dessins filtrés par l\'ID', id_dilem, 'et année', selectedYear, ':', filteredFeatures.length);
   fukushimaLayer.addData({ type: 'FeatureCollection', features: filteredFeatures });
 
   // Ajouter la couche Fukushima à la carte si elle n'est pas déjà ajoutée
@@ -289,6 +292,13 @@ function updateFukushima(id_dilem, year) {
     fukushimaLayer.addTo(map);
   }
 }
+
+// Événement de changement sur le curseur de sélection d'année
+document.getElementById('slider').addEventListener('input', function () {
+  var selectedYear = parseInt(this.value); // Récupérer la nouvelle année sélectionnée
+  var selectedid_dilem = document.getElementById('id_dilemSelect').value; // Récupérer l'ID_DILEM actuellement sélectionné
+  updateFukushima(selectedid_dilem, selectedYear); // Mettre à jour les entités Fukushima avec la nouvelle année
+});
 
 // Appel de la fonction addFukushimaLayer avec l'URL de votre fichier GeoJSON
 addFukushimaLayer("data/fukushima.geojson");
